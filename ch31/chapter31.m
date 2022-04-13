@@ -151,15 +151,13 @@ set(gca,'xlim',[0 1],'ylim',[0 1])
 legend({'group 1';'group 2';'group 3'})
 
 %% SVM in-sampling (!!)
-
+clear all
 % this and the next cell will not work in Octave. try the libsvm toolbox
-
 load EEG_LR
 
 % initialize
 accu = zeros(size(timevec));
 trueLabels = [ones(size(l_eeg,3),1); 2*ones(size(r_eeg,3),1)];
-
 
 % loop over time (skip some points for speed)
 for ti=1:20:size(l_eeg,2) 
@@ -204,6 +202,9 @@ for ti=1:20:size(l_eeg,2)
         % remove test trial from training
         traindata = data;
         traindata(triali,:) = [];
+        
+        %traindata = data([1:triali-1 triali+1:end],:);
+        
         templabels(triali)  = [];
         
         % fit model on training data

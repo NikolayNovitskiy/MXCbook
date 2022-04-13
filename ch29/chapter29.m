@@ -76,7 +76,7 @@ figure(3), clf
 funch = @(x) -sin(x)./x;
 
 % minimize function
-[xval,funcval] = fminsearch(funch,0);
+[xval,funcval] = fminsearch(funch,20);
 
 figure(5), clf
 x = -50:.01:100;

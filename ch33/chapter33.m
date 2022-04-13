@@ -9,7 +9,7 @@
 % Mike X Cohen assumes no responsibility for incorrect use of this code. 
 
 %% create the to-be-animated signal
-
+clear all; close all
 % signal properties
 srate = 1000;
 timevec = 0:1/srate:5;
@@ -61,11 +61,16 @@ xlabel('Time (ms)'), ylabel('Power')
 for ti=1:vidspeed:length(timevec)
     
     % draw complex values in polar space
-    set(as_h,'XData',real(as(max(1,ti-timelag):ti)),'YData',imag(as(max(1,ti-timelag):ti)))
-    
+    %set(as_h,'XData',real(as(max(1,ti-timelag):ti)),'YData',imag(as(max(1,ti-timelag):ti)))
+    set(as_h,'XData',real(as(1:ti)),'YData',imag(as(1:ti)))
     % update cartesian plots
-    set(bp_h,'XData',timevec(max(1,ti-timelag):ti),'YData',real(as(max(1,ti-timelag):ti)))
-    set(pw_h,'XData',timevec(max(1,ti-timelag):ti),'YData',abs(as(max(1,ti-timelag):ti)).^2)
+    %set(bp_h,'XData',timevec(max(1,ti-timelag):ti),'YData',real(as(max(1,ti-timelag):ti)))
+     set(bp_h,'XData',timevec(1:ti),'YData',real(as(1:ti)))
+    %set(pw_h,'XData',timevec(max(1,ti-timelag):ti),'YData',abs(as(max(1,ti-timelag):ti)).^2)
+    set(pw_h,'XData',timevec(1:ti),'YData',abs(as(1:ti)).^2)
+    
+  
+    %pause(0.01)
 end
 
 %% gabor movie
@@ -82,7 +87,6 @@ phases  = linspace(0,pi,nFrames);
 rotates = linspace(0,pi/2,nFrames);
 widths  = [ linspace(5,12,nFrames/2) linspace(12,5,nFrames/2) ];
 
-
 % setup the figure
 figure(3), clf
 subplot(221)
@@ -98,6 +102,8 @@ gabr_h = imagesc(randn(size(x)));
 title('Gabor'), axis off, axis square
 set(gca,'clim',[-1 1])
 
+vidObj=VideoWriter('gaborFilm.avi')
+open(vidObj)
 
 % and... action!
 for framei=1:nFrames
@@ -123,8 +129,9 @@ for framei=1:nFrames
     set(gabr_h,'CData',sine2d .* gaus2d);
     
     pause(.1)
+    writeVideo(vidObj,getframe(gcf))
 end
-
+close(vidObj)
 %% wavelet convolution
 
 % load data
